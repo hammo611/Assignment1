@@ -1,0 +1,21 @@
+
+#include<stdio.h>
+
+main()
+{
+ int num;
+ FILE *input;
+ 
+ input = fopen("\\zfssa0\home_student\c3256828\Profile\Desktop\data.txt", "r");
+ if(input == NULL)
+ {
+     perror("fopen()");
+
+ }
+ 
+ while(!feof(input))
+ {
+     fscanf(input, "%d", num)
+ }
+return 0;
+}

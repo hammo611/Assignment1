@@ -1,0 +1,26 @@
+#include <stdio.h>
+
+int main()
+{
+   char test[] = "ABCD";
+   int key = 5856;
+   int i = 0;
+   int num[i];
+   
+   
+   while(i < 4)
+   {
+       num[i] = (int)test[i];
+       num[i] = ((num[i] + key -13) % 26);
+      // printf("%d\n", (num[i]));
+       
+        num[i] = num[i] + 65;
+       printf("%c\n", (char)num[i]);
+       
+       i++;
+    }
+
+    
+    return 0;
+}
+

@@ -1,0 +1,114 @@
+#include <stdio.h>
+#include <string.h>
+
+int *encpt_rotat();
+int *decpt_rotat(); 
+int menu_fn();
+
+int main()
+{
+  
+int *p; //pointer to NUM array 
+int i; // counter for reading elements in NUM array
+int cypher;
+
+cypher = menu_fn();
+
+
+switch(cypher){
+    case 1:
+    {
+        
+        p = encpt_rotat();
+        for(i = 0; i < 4; i++)
+        {
+            printf("%c\n", (char)p[i]); //reads intergers using Pointer to NUM array and type casts them to char
+        }   
+        break; 
+    }
+   
+    case 2:
+    {
+             p = decpt_rotat();
+            for(i = 0; i < 4; i++)
+                {
+                    printf("%c\n", (char)p[i]); //reads intergers using Pointer to NUM array and type casts them to char
+                }   
+            break; 
+    }
+
+  }
+    return 0;
+}
+
+int *encpt_rotat() //rotation cypher - incyption 
+{
+   char test[] = ("TEST");
+   int key = 5;
+   int i = 0;
+   static int num[5];
+
+  //  printf("type the message you want to encrypt:");
+  
+
+   while(i < 4)
+   {
+       num[i] = (int)test[i];
+       num[i] = ((num[i] + key -13) % 26);
+      // printf("%d\n", (num[i]));
+
+        num[i] = num[i] + 65;
+       i++;
+    }
+    return num;
+}
+
+int *decpt_rotat()
+{
+    char test[] = ("YJXY");
+    int key = 5;
+    int i = 0;
+    static int num[5];
+
+  //  printf("type the message you want to encrypt:");
+  
+
+   while(i < 4)
+   {
+       num[i] = (int)test[i];
+       num[i] = ((num[i] - key +13) % 26);
+      // printf("%d\n", (num[i]));
+
+        num[i] = num[i] + 65;
+       i++;
+    }
+    return num;
+}
+
+int menu_fn()
+{
+    int cypher;
+    printf("press 1 for encryption rotation cypher\n");
+    printf("press 2 for decryption rotation cypher\n");
+    scanf("%d", &cypher);
+    
+    switch(cypher)
+    {
+        case 1:
+         {
+            return cypher;
+            break;
+         }
+        case 2:
+         {
+            return cypher;
+            break;
+         }
+        default:
+         {
+            return 0;
+            break;
+         }
+    }
+
+}

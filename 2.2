@@ -1,0 +1,154 @@
+#include <stdio.h>
+#include <string.h>
+
+char *encpt_rotat();
+char *decpt_rotat();
+int menu_fn();
+char data_File_Input();
+char data_File_Output(char *p);
+
+int main()
+{
+  
+char *p; //pointer to NUM array 
+int cypher;
+char message[1000]; //message to encrypt
+int key; //key for encryption sdtin
+
+cypher = menu_fn(&key);
+data_File_Input(message);
+
+switch(cypher){
+    case 1:
+    {
+        p = encpt_rotat(message, key);
+        data_File_Output(p);
+        printf("%d", key);
+        break; 
+    }
+   
+    case 2:
+    {
+        p = decpt_rotat(message);
+        data_File_Output(p);
+        
+        break; 
+    }
+
+  }
+    return 0;
+}
+
+char *encpt_rotat(char *message, int *key) //rotation cypher - incyption 
+{
+   //char test[] = ("TEST");
+  // int key = 0;
+   int i = 0;
+   static char num[5];
+   int b;
+
+  //  printf("type the message you want to encrypt:");
+  
+
+   while(i < 4)
+   {
+       num[i] = message[i];
+       b = *key;
+       num[i] = ((num[i] + b -13) % 26);
+    //   printf("%d\n", (num[i]));
+
+        num[i] = num[i] + 65;
+       i++;
+    }
+    return num;
+}
+
+char *decpt_rotat(char *message)
+{
+   // char test[] = ("YJXY");
+    int key = 5;
+    int i = 0;
+    static char num[5];
+
+//  printf("type the message you want to encrypt:");
+ // scanf("%c", test[]);
+
+   while(i < 4)
+   {
+       num[i] = message[i];
+       num[i] = ((num[i] - key +13) % 26);
+      // printf("%d\n", (num[i]));
+
+        num[i] = num[i] + 65;
+       i++;
+    }
+    return num;
+}
+
+int menu_fn(int *key)
+{
+    int cypher;
+    printf("press 1 for encryption rotation cypher\n");
+    printf("press 2 for decryption rotation cypher\n");
+    scanf("%d", &cypher);
+    
+    switch(cypher)
+    {
+        case 1:
+         {
+            printf("enter the encryption key:\n");
+            scanf("%d", key);
+            return cypher;
+            break;
+         }
+        case 2:
+         {
+            printf("enter the decryption key:\n");
+            scanf("%d", key);
+            return cypher;
+            break;
+         }
+        default:
+         {
+            return 0;
+            break;
+         }
+    }
+
+}
+
+char data_File_Input(char *message)
+{
+     int i = 0;
+     
+     FILE *input;
+    
+     input = fopen("dataFile", "r");
+     if(input == NULL)
+     {
+         perror("fopen()");
+     }
+
+    while(!feof(input))
+    {
+        fscanf(input, "%c", &message[i]);
+        i++;
+    }
+    message[i] = '\0';
+    
+return 0;
+}
+
+char data_File_Output(char *p)
+{
+    FILE *output;
+    
+    output = fopen("output_Message", "w");
+    if(output == NULL)
+    {
+        perror("fopen()");
+    }
+    fprintf(output, "%s", p);
+    
+return 0;    
+}

@@ -1,0 +1,36 @@
+#include <stdio.h>
+#include <string.h>
+int main()
+{   char key[] = "QWERTYUIOPLKJHGFDSAZXCVBNM";
+    char abet[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    char test[] = "TONYISAMADMAN";
+    char output[200]; 
+    int i = 0;
+    int j = 0;
+    int len1;
+    int len2;
+    
+    len1 = strlen(abet);
+    len2 = strlen(test);
+
+
+    while(j<len2)
+    {
+        if(abet[i] == test[j])
+        {
+            printf("%c  ", abet[i]);
+            printf("%d\n", i);
+            output[j] = key[i];
+           j++;
+           i=0;
+        }
+        else
+        {
+            i++;
+        }
+
+    }
+    printf("%s", output);
+    
+return 0;
+}

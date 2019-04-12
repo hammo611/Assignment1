@@ -1,0 +1,305 @@
+#include <stdio.h>
+#include <string.h>
+
+char *encpt_rotat(char *message, int len, int key); // encrpt rotation cipher fn - aguments: pointer to the message array, length of message array
+char *decpt_rotat(char *message, int len, int key); // decrpt rotation cipher fn - aguments: pointer to the message array, length of message array
+char *encpt_sub(char *message, int len, char *subKey); // encrpt substition cipher fn - aguments: pointer to the message array, length of message array
+char *decpt_sub(char *message, int len, char *subKey); // decrpt substition cipher fn - aguments: pointer to the message array, length of message array
+
+int menu_fn(); //menu fn - prints interface for user to screan
+
+int key_File_Input(char *subKey);
+char data_File_Input(); //reading data from file fn
+char data_File_Output(char *p); //writing data to file
+
+int main()
+{  
+char *p; //pointer to array's returned by the cipher functions 
+char message[1000]; //message to encrypt
+char subKey[27];
+int cipher; //hold number for switch statement - what you want to do with the message in input file
+int len; //length of message
+int key;
+
+
+cipher = menu_fn(); // call to menu function - returns number associated with what user wants to do with the message - needed for the switch statement 
+data_File_Input(message); //call to reading data from input file function - this function stores data into message array
+key = key_File_Input(subKey);
+len = strlen(message); //using string.h library finds string length
+//printf("%d\n", key);
+//printf("%s",subKey);
+
+switch(cipher){
+    case 1: //encrpt rotat cipher
+    {
+        p = encpt_rotat(message, len, key); //call to encrpt rotat function and stores it at pointer p
+        data_File_Output(p); //call to writing data to file function - writes the encrypted message stored at p to file 
+        printf("%s\n", p); //prints p to console 
+        
+        break; 
+    }
+   
+    case 2:
+    {
+        p = decpt_rotat(message, len, key); //call to decrpt rotat function and stores it at pointer p
+        data_File_Output(p); //call to writing data to file function - writes the decrypted message stored at p to file
+        printf("%s\n", p); //prints p to console 
+        
+        break; 
+    }
+
+    case 3:
+    {
+        p = encpt_sub(message, len, subKey); //call to encrpt sub function and stores it at pointer p
+        data_File_Output(p); //call to writing data to file function - writes the decrypted message stored at p to file
+        printf("%s\n", p); //prints p to console 
+        
+        break;    
+    }
+    
+    case 4:
+    {
+        p = decpt_sub(message, len, subKey); //call to decrpt sub function and stores it at pointer p
+        data_File_Output(p); //call to writing data to file function - writes the decrypted message stored at p to file
+        printf("%s\n", p); //prints p to console 
+        
+        break;
+    }
+  }
+    return 0;
+}
+
+char *encpt_rotat(char *message, int len, int key) //rotation cypher - encyption 
+{
+   //char test[] = ("TEST");
+  // int key = 1; //key for encryption - user has to change to get a different code
+   int i = 0; //counter 
+   static char num[200]; //array for encpted message
+ //printf("%d\n", key);
+
+  //  printf("type the message you want to encrypt:");
+ //  len = strlen(message);
+   while(i < len - 2) //loop to read array and manipulate it 
+   {
+       num[i] = message[i]; //not really needed
+       
+       num[i] = (((num[i] - 65) + key) % 26); //formula that changes shifts each element of array "key" times  
+    //   printf("%d\n", (num[i])); 
+
+        num[i] = num[i] + 65; //adds 65 to each element of array to get a new array with the key shift- ascii 
+       i++; //adds 1 to counter to read next element in array 
+    }
+    //printf("%d", len);
+    return num; //retuns new encrpted message 
+}
+
+char *encpt_sub(char *message, int len, char *subKey) //substitution cypher - encryption
+{   //char key[] = "QWERTYUIOPLKJHGFDSAZXCVBNM"; //substitution key - user must change to get new code
+    char abet[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //array that holds the alphabet 
+   // char test[] = "TONYISAMADMAN";
+    static char output[200]; //array that holds new encypted array 
+    int i = 0; //counter 1 to read along alpabet array 
+    int j = 0; // counter 2 to read along message array - that comes from file 
+    int len1; //length of alphabet - not really needed
+   // int len2;
+    
+    len1 = strlen(abet); //finds length of alphabet array - not really needed 
+    //len2 = strlen(test);
+
+
+   // while(j < len) //loop not need - creates infin loop
+    {
+        while(i < len1) //starts loop of both arrays - len1-1 because null character at end of array 
+        {
+            if(abet[i] == message[j]) //if first element is in alphabet 
+            {
+    //            printf("%c  ", abet[i]); //testing 
+    //            printf("%d\n", i); //testing 
+                output[j] = subKey[i]; //saves position of the element in alphabet 
+                j++; //counter moves onto next element in data array 
+                i = 0; //sets counter of alphabet back to start - without this itll it wont check the characters in abet array preceeding the one already recoreded
+            }
+            else
+            {
+                i++; //counter goes to next element of abet array 
+            }
+        }
+
+    }
+   
+    return output; //returns static array of encrypted sub message
+}
+
+char *decpt_rotat(char *message, int len, int key)  //rotation cypher - decypted
+{
+   // char test[] = ("YJXY");
+    //int key = 1; //key for decryption - user has to already know this and imput it 
+    int i = 0; //counter for charater manipulation in array
+    static char num[200]; //array for decypted messag3
+   // int len;
+//  printf("type the message you want to encrypt:");
+ // scanf("%c", test[]);
+   // len = strlen(message);
+   // printf("%d", len);
+    
+   while(i < (len - 2)) //loop to ready and manipulate aray 
+   {
+       num[i] = message[i]; //not really needed
+   //     printf("%d  ", (num[i])); //prints to console for testing 
+       num[i] = (((num[i] - 65) - key) % 26); //formula that shifts charracters back to original 
+      printf("%d\n", (num[i])); //prints for testing 
+
+        num[i] = num[i] + 65; //adds 65 because ascii
+       i++; //moves to next element of array 
+    }
+    return num; //returns decypted message in array 
+}
+
+char *decpt_sub(char *message, int len, char *subKey) // substitution cypher - decryption 
+{
+    //char key[] = "QWERTYUIOPLKJHGFDSAZXCVBNM"; //key - user must already know this to decrypt message 
+    char abet[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //alphabet array 
+    //char test[] = "ZGHNOAQJQRJQH"; //test array
+    static char output[200]; //array that holds decrypted message
+    int i = 0; //counter 1 to read abet array
+    int j = 0; //counter 2 to read data array
+    int len1; // length of abet - not really needed
+    //int len2;
+    
+    len1 = strlen(abet); //reads length of abet - not needed
+    //len2 = strlen(message);
+
+
+  //  while(j < len) - error creates infin loop
+    {
+        while(i < len1) //starts loop of both arrays - len1-1 because null character at end of array 
+        {
+            if(subKey[i] == message[j]) //if element is in key array 
+            {
+              //  printf("%c  ", abet[i]); // prints for testing 
+            //    printf("%d\n", i); //testing 
+                output[j] = abet[i]; //usuing the key counter - assigns the corrresponding element to new arrary 
+               j++; //moves to next element in message array 
+               i=0; //starts abet back to a
+            }
+            else
+            {
+                i++; //moves down abet array 
+            }
+        }
+    }
+    return output; //returns new decrpted message 
+}
+
+int menu_fn() // menu function - prints user friendly interface 
+{
+    int cipher; //recoreds what user wants to do 
+    
+    printf("press 1 for encryption rotation cipher\n"); //prints to console
+    printf("press 2 for decryption rotation cipher\n"); //print s to console
+    printf("press 3 for encryption substition cipher\n"); //priunts to console
+    printf("press 4 for decryption substition cipher\n"); //prints to console
+    
+    scanf("%d", &cipher); //stores users input 
+    
+    switch(cipher) //determines what is returned in accordance to what user wants to do
+    {
+        case 1:
+         {
+            return cipher; //encpt rotat
+            break;
+         }
+        case 2:
+         {
+            return cipher; //decpt rotat
+            break;
+         }
+        case 3:
+        {
+            return cipher; //encpt sub
+            break;
+        }
+        case 4:
+        {
+            return cipher; //decpt sub
+            break;
+        }
+        default:
+         {
+            return 0; //ends program
+            break;
+         }
+    }
+
+}
+
+char data_File_Input(char *message) //opens reading data file 
+{
+     int i = 0; //counter to read data in array
+     int counter = 0; //dont need
+     
+     FILE *input; //pointer to file
+    
+     input = fopen("dataFile", "r"); //opens reading file
+     if(input == NULL) //checks theres something in file 
+     {
+         perror("fopen()"); //prints message if nothing is in file
+     }
+     
+     while(!feof(input)) //reads file unil end of file 
+     {
+        
+        fscanf(input, "%c", &message[i]); //sorts elements in array 
+        i++; //moves to next element 
+        counter++; // not needed
+     }
+       message[i] = '\0'; //not sure if needed - tells end of string 
+     //  int len = strlen(message);
+   // printf("%d",message);
+   
+return 0; //returns 0 - everything is in pointers 
+}
+
+int key_File_Input(char *subKey) //opens reading data file 
+{
+     //int i = 0; //counter to read data in array
+     //int counter = 0; //dont need
+    int key;
+    //char subKey[27];
+    //char *c
+    
+     FILE *input; //pointer to file
+    
+     input = fopen("rotat_key", "r"); //opens reading file
+     if(input == NULL) //checks theres something in file 
+     {
+         perror("fopen()"); //prints message if nothing is in file
+     }
+     
+     while(!feof(input)) //reads file unil end of file 
+     {
+        
+        fscanf(input, "%d", &key); //sorts elements in array 
+        fscanf(input, "%s", subKey);
+     }
+      // message[i] = '\0'; //not sure if needed - tells end of string 
+     //  int len = strlen(message);
+  //printf("%s",subKey);
+   //*c = subKey;
+return key; //returns 0 - everything is in pointers 
+}
+
+char data_File_Output(char *p) //opens and and writes to new file 
+{
+    FILE *output; //pointer to output file 
+    
+    output = fopen("output_Message", "w"); //opens writing file 
+    if(output == NULL) // checks file is open
+    {
+        perror("fopen()"); // if not open prints error tmessage 
+    }
+    fprintf(output, "%s", p); //if open prints anything at p to new file 
+    
+return 0;  
+}
+
